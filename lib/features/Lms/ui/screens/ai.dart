@@ -16,6 +16,7 @@ import 'package:responsive_framework/responsive_framework.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
+import '../widgets/webtemplete.dart';
 import 'home.dart';
 
 class ai_model extends StatefulWidget {
@@ -43,7 +44,7 @@ class _ai_modelState extends State<ai_model> {
   SpeechToText _speechToText = SpeechToText();
   bool _speechEnabled = false;
   String _lastWords = '';
-  String question="";
+  String question = "";
   @override
   void initState() {
     super.initState();
@@ -92,8 +93,6 @@ class _ai_modelState extends State<ai_model> {
     await flutterTts.setVoice({"name": "Karen", "locale": "en-AU"});
     await flutterTts.setPitch(1.5);
     await flutterTts.speak(text);
-  
-
   }
 
   Widget _buildUI() {
@@ -359,372 +358,744 @@ class _ai_modelState extends State<ai_model> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: ResponsiveBreakpoints.of(context).isMobile
-          ? Container(
-              height: MediaQuery.sizeOf(context).height * 0.08,
-              margin: EdgeInsets.only(left: 40, right: 20, bottom: 5),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20.r),
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [colors.color1, colors.color2],
-                ),
-                // image: DecorationImage(
-                //   image: AssetImage('assets/back.gif'),
-                //   fit: BoxFit.cover,
-                // ),
-              ),
-              child: Row(
-                children: [
-                  // additional icon
-                  Padding(
-                    padding: EdgeInsets.only(left: 15.w),
-                    child: GestureDetector(
-                      onTap: () {
-                        print('add icon');
-                        context.navigateTo(router.ai_convertion);
-                      },
-                      child: CircleAvatar(
-                        radius: 18.r,
-                        backgroundColor: colors.backbackground,
-                        child: Icon(
-                          Icons.spatial_tracking_outlined,
-                          size: 22.sp,
-                          color: colors.textcolor,
-                        ),
+    return ResponsiveBreakpoints.of(context).isMobile
+        ? Scaffold(
+            floatingActionButton: ResponsiveBreakpoints.of(context).isMobile
+                ? Container(
+                    height: MediaQuery.sizeOf(context).height * 0.08,
+                    margin: EdgeInsets.only(left: 40, right: 20, bottom: 5),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20.r),
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [colors.color1, colors.color2],
                       ),
+                      // image: DecorationImage(
+                      //   image: AssetImage('assets/back.gif'),
+                      //   fit: BoxFit.cover,
+                      // ),
                     ),
-                  ),
-                  // send massage
-
-                  Padding(
-                    padding: EdgeInsets.only(left: 5.w),
-                    child: Container(
-                      width: 165.w,
-                      child: TextFormField(
-                        onChanged: (value) {
-                          question = value;
-                        },
-                        //    controller: textEditingController,
-                        decoration: InputDecoration(
-                          hintText: _speechToText.isListening
-                              ? _lastWords
-                              : " Ask me anything...",
-                          hintStyle: TextStyle(
-                            color: colors.textcolor,
-                            fontSize: 10.sp,
+                    child: Row(
+                      children: [
+                        // additional icon
+                        Padding(
+                          padding: EdgeInsets.only(left: 15.w),
+                          child: GestureDetector(
+                            onTap: () {
+                              print('add icon');
+                              context.navigateTo(router.ai_convertion);
+                            },
+                            child: CircleAvatar(
+                              radius: 18.r,
+                              backgroundColor: colors.backbackground,
+                              child: Icon(
+                                Icons.spatial_tracking_outlined,
+                                size: 22.sp,
+                                color: colors.textcolor,
+                              ),
+                            ),
                           ),
-                          border: InputBorder.none,
                         ),
-                      ),
-                    ),
-                  ),
-
-                  // send icon
-
-                  Padding(
-                    padding: EdgeInsets.only(left: 5.w),
-                    child: GestureDetector(
-                      onTap: () {
                         // send massage
-                        _sendMessage(ChatMessage(
-                          user: currentUser,
-                          createdAt: DateTime.now(),
-                          text: question,
-                        ));
-                      },
-                      child: CircleAvatar(
-                        radius: 12.r,
-                        backgroundColor: colors.backbackground,
-                        child: Icon(
-                          Icons.send,
-                          size: 15.sp,
-                          color: colors.textcolor,
+
+                        Padding(
+                          padding: EdgeInsets.only(left: 5.w),
+                          child: Container(
+                            width: 165.w,
+                            child: TextFormField(
+                              onChanged: (value) {
+                                question = value;
+                              },
+                              //    controller: textEditingController,
+                              decoration: InputDecoration(
+                                hintText: _speechToText.isListening
+                                    ? _lastWords
+                                    : " Ask me anything...",
+                                hintStyle: TextStyle(
+                                  color: colors.textcolor,
+                                  fontSize: 10.sp,
+                                ),
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        // send icon
+
+                        Padding(
+                          padding: EdgeInsets.only(left: 5.w),
+                          child: GestureDetector(
+                            onTap: () {
+                              // send massage
+                              _sendMessage(ChatMessage(
+                                user: currentUser,
+                                createdAt: DateTime.now(),
+                                text: question,
+                              ));
+                            },
+                            child: CircleAvatar(
+                              radius: 12.r,
+                              backgroundColor: colors.backbackground,
+                              child: Icon(
+                                Icons.send,
+                                size: 15.sp,
+                                color: colors.textcolor,
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        // send voice icon
+
+                        Padding(
+                          padding: EdgeInsets.only(left: 5.w),
+                          child: GestureDetector(
+                            onTap: _speechToText.isNotListening
+                                ? _startListening
+                                : _stopListening,
+                            child: CircleAvatar(
+                              radius: 12.r,
+                              backgroundColor: colors.backbackground,
+                              child: Icon(
+                                Icons.mic,
+                                size: 15.sp,
+                                color: colors.textcolor,
+                              ),
+                            ),
+                          ),
+                        )
+                        // send image icon
+
+                        ,
+                        Padding(
+                          padding: EdgeInsets.only(left: 5.w),
+                          child: GestureDetector(
+                            onTap: _sendMediaMessageWeb,
+                            child: CircleAvatar(
+                              radius: 12.r,
+                              backgroundColor: colors.backbackground,
+                              child: Icon(
+                                Icons.image,
+                                size: 15.sp,
+                                color: colors.textcolor,
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                : Container(
+                    height: MediaQuery.sizeOf(context).height * 0.08,
+                    margin: EdgeInsets.only(left: 40, right: 20, bottom: 5),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20.r),
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [colors.color1, colors.color2],
+                      ),
+                      // image: DecorationImage(
+                      //   image: AssetImage('assets/back.gif'),
+                      //   fit: BoxFit.cover,
+                      // ),
+                    ),
+                    child: Row(
+                      children: [
+                        // additional icon
+                        Padding(
+                          padding: EdgeInsets.only(left: 15.w),
+                          child: GestureDetector(
+                            onTap: () {
+                              print('add icon');
+                              context.navigateTo(router.ai_convertion);
+                            },
+                            child: CircleAvatar(
+                              radius:
+                                  ResponsiveValue(context, conditionalValues: [
+                                Condition.equals(name: MOBILE, value: 10.0),
+                                Condition.equals(name: TABLET, value: 10.0),
+                                Condition.equals(name: DESKTOP, value: 20.0),
+                                Condition.equals(name: '4K', value: 25.0)
+                              ]).value,
+                              backgroundColor: colors.backbackground,
+                              child: Icon(
+                                Icons.add,
+                                size: context.smallfontsize,
+                                color: colors.textcolor,
+                              ),
+                            ),
+                          ),
+                        ),
+                        // send massage
+
+                        Padding(
+                          padding: EdgeInsets.only(left: 5.w),
+                          child: Container(
+                            width: context.width(0.7),
+                            child: TextFormField(
+                              //  controller: massageController,
+                              decoration: InputDecoration(
+                                hintText: _speechToText.isListening
+                                    ? _lastWords
+                                    : " Ask me anything...",
+                                hintStyle: TextStyle(
+                                  color: colors.textcolor,
+                                  fontSize: context.smallfontsize,
+                                ),
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        // send icon
+
+                        Padding(
+                          padding: EdgeInsets.only(left: 5.w),
+                          child: GestureDetector(
+                            onTap: () {
+                              // send massage
+                              _sendMessage(ChatMessage(
+                                user: currentUser,
+                                createdAt: DateTime.now(),
+                                text: question,
+                              ));
+                            },
+                            child: CircleAvatar(
+                              radius:
+                                  ResponsiveValue(context, conditionalValues: [
+                                Condition.equals(name: MOBILE, value: 10.0),
+                                Condition.equals(name: TABLET, value: 10.0),
+                                Condition.equals(name: DESKTOP, value: 20.0),
+                                Condition.equals(name: '4K', value: 25.0)
+                              ]).value,
+                              backgroundColor: colors.backbackground,
+                              child: Icon(
+                                Icons.send,
+                                size: context.smallfontsize,
+                                color: colors.textcolor,
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        // send voice icon
+
+                        Padding(
+                          padding: EdgeInsets.only(left: 5.w),
+                          child: GestureDetector(
+                            onTap: _speechToText.isNotListening
+                                ? _startListening
+                                : _stopListening,
+                            child: CircleAvatar(
+                              radius:
+                                  ResponsiveValue(context, conditionalValues: [
+                                Condition.equals(name: MOBILE, value: 10.0),
+                                Condition.equals(name: TABLET, value: 10.0),
+                                Condition.equals(name: DESKTOP, value: 20.0),
+                                Condition.equals(name: '4K', value: 25.0)
+                              ]).value,
+                              backgroundColor: colors.backbackground,
+                              child: Icon(
+                                Icons.mic,
+                                size: context.smallfontsize,
+                                color: colors.textcolor,
+                              ),
+                            ),
+                          ),
+                        )
+                        // send image icon
+
+                        ,
+                        Padding(
+                          padding: EdgeInsets.only(left: 5.w),
+                          child: GestureDetector(
+                            onTap: _sendMediaMessageWeb,
+                            child: CircleAvatar(
+                              radius:
+                                  ResponsiveValue(context, conditionalValues: [
+                                Condition.equals(name: MOBILE, value: 10.0),
+                                Condition.equals(name: TABLET, value: 10.0),
+                                Condition.equals(name: DESKTOP, value: 20.0),
+                                Condition.equals(name: '4K', value: 25.0)
+                              ]).value,
+                              backgroundColor: colors.backbackground,
+                              child: Icon(
+                                Icons.image,
+                                size: context.smallfontsize,
+                                color: colors.textcolor,
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+            body:
+                //_buildUI(),
+                SingleChildScrollView(
+              child: Column(
+                children: [
+                  ClipPath(
+                    clipper: ClipPathClass(),
+                    child: Container(
+                      height: context.height(0.1),
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [colors.color1, colors.color2],
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(23.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                context.pop();
+                              },
+                              child: CircleAvatar(
+                                backgroundColor: colors.color1,
+                                radius: 20,
+                                // add person icon
+                                child: Icon(
+                                  Icons.arrow_back_sharp,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              'Course details',
+                              style:
+                                  textstyle.title.copyWith(color: Colors.white),
+                            ),
+                            CircleAvatar(
+                              radius: 20,
+                              // add person icon
+                              child: Icon(
+                                Icons.favorite,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
                   ),
-
-                  // send voice icon
-
-                  Padding(
-                    padding: EdgeInsets.only(left: 5.w),
-                    child: GestureDetector(
-                      onTap: 
-                      _speechToText.isNotListening
-                  ? _startListening
-                  : _stopListening,
-                      
-                      child: CircleAvatar(
-                        radius: 12.r,
-                        backgroundColor: colors.backbackground,
-                        child: Icon(
-                          Icons.mic,
-                          size: 15.sp,
-                          color: colors.textcolor,
-                        ),
-                      ),
+                  Container(
+                    height: MediaQuery.sizeOf(context).height * 0.8,
+                    child: ListView.builder(
+                      reverse: true,
+                      itemCount: messages.length,
+                      itemBuilder: (context, index) {
+                        return messages[index].user.firstName == "Gemini"
+                            ? Padding(
+                                padding: EdgeInsets.only(
+                                    left: 10.w,
+                                    right: 100.w,
+                                    top: 10.h,
+                                    bottom: 10.h),
+                                child: massage(messages[index]),
+                              )
+                            : Padding(
+                                padding: EdgeInsets.only(
+                                    left: 100.w,
+                                    right: 10.w,
+                                    top: 10.h,
+                                    bottom: 10.h),
+                                child: massage(messages[index]),
+                              );
+                      },
                     ),
                   )
-                // send image icon
-
-                  ,Padding(
-                    padding: EdgeInsets.only(left: 5.w),
-                    child: GestureDetector(
-                      onTap: 
-                      _sendMediaMessageWeb,
-                      
-                      child: CircleAvatar(
-                        radius: 12.r,
-                        backgroundColor: colors.backbackground,
-                        child: Icon(
-                          Icons.image,
-                          size: 15.sp,
-                          color: colors.textcolor,
-                        ),
-                      ),
-                    ),
-                  )
-             
-              
                 ],
               ),
-            )
-          : Container(
-              height: MediaQuery.sizeOf(context).height * 0.08,
-              margin: EdgeInsets.only(left: 40, right: 20, bottom: 5),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20.r),
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [colors.color1, colors.color2],
-                ),
-                // image: DecorationImage(
-                //   image: AssetImage('assets/back.gif'),
-                //   fit: BoxFit.cover,
-                // ),
-              ),
-              child: Row(
-                children: [
-                  // additional icon
-                  Padding(
-                    padding: EdgeInsets.only(left: 15.w),
-                    child: GestureDetector(
-                      onTap: () {
-                        print('add icon');
-                        context.navigateTo(router.ai_convertion);
-
-                      },
-                      child: CircleAvatar(
-                        radius: ResponsiveValue(context, conditionalValues: [
-                          Condition.equals(name: MOBILE, value: 10.0),
-                          Condition.equals(name: TABLET, value: 10.0),
-                          Condition.equals(name: DESKTOP, value: 20.0),
-                          Condition.equals(name: '4K', value: 25.0)
-                        ]).value,
-                        backgroundColor: colors.backbackground,
-                        child: Icon(
-                          Icons.add,
-                          size: context.smallfontsize,
-                          color: colors.textcolor,
-                        ),
+            ),
+          )
+        : webtemplete(widegt: Scaffold(
+           floatingActionButton: ResponsiveBreakpoints.of(context).isMobile
+                ? Container(
+                    height: MediaQuery.sizeOf(context).height * 0.08,
+                    margin: EdgeInsets.only(left: 40, right: 20, bottom: 5),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20.r),
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [colors.color1, colors.color2],
                       ),
+                      // image: DecorationImage(
+                      //   image: AssetImage('assets/back.gif'),
+                      //   fit: BoxFit.cover,
+                      // ),
                     ),
-                  ),
-                  // send massage
-
-                  Padding(
-                    padding: EdgeInsets.only(left: 5.w),
-                    child: Container(
-                      width: context.width(0.7),
-                      child: TextFormField(
-                        //  controller: massageController,
-                        decoration: InputDecoration(
-                          hintText: _speechToText.isListening
-                              ? _lastWords
-                              : " Ask me anything...",
-                          hintStyle: TextStyle(
-                            color: colors.textcolor,
-                            fontSize: context.smallfontsize,
+                    child: Row(
+                      children: [
+                        // additional icon
+                        Padding(
+                          padding: EdgeInsets.only(left: 15.w),
+                          child: GestureDetector(
+                            onTap: () {
+                              print('add icon');
+                              context.navigateTo(router.ai_convertion);
+                            },
+                            child: CircleAvatar(
+                              radius: 18.r,
+                              backgroundColor: colors.backbackground,
+                              child: Icon(
+                                Icons.spatial_tracking_outlined,
+                                size: 22.sp,
+                                color: colors.textcolor,
+                              ),
+                            ),
                           ),
-                          border: InputBorder.none,
                         ),
-                      ),
-                    ),
-                  ),
-
-                  // send icon
-
-                  Padding(
-                    padding: EdgeInsets.only(left: 5.w),
-                    child: GestureDetector(
-                      onTap: () {
                         // send massage
-                         _sendMessage(ChatMessage(
-                          user: currentUser,
-                          createdAt: DateTime.now(),
-                          text: question,
-                        ));
-                      },
-                      child: CircleAvatar(
-                        radius: ResponsiveValue(context, conditionalValues: [
-                          Condition.equals(name: MOBILE, value: 10.0),
-                          Condition.equals(name: TABLET, value: 10.0),
-                          Condition.equals(name: DESKTOP, value: 20.0),
-                          Condition.equals(name: '4K', value: 25.0)
-                        ]).value,
-                        backgroundColor: colors.backbackground,
-                        child: Icon(
-                          Icons.send,
-                          size: context.smallfontsize,
-                          color: colors.textcolor,
+
+                        Padding(
+                          padding: EdgeInsets.only(left: 5.w),
+                          child: Container(
+                            width: 165.w,
+                            child: TextFormField(
+                              onChanged: (value) {
+                                question = value;
+                              },
+                              //    controller: textEditingController,
+                              decoration: InputDecoration(
+                                hintText: _speechToText.isListening
+                                    ? _lastWords
+                                    : " Ask me anything...",
+                                hintStyle: TextStyle(
+                                  color: colors.textcolor,
+                                  fontSize: 10.sp,
+                                ),
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ),
                         ),
+
+                        // send icon
+
+                        Padding(
+                          padding: EdgeInsets.only(left: 5.w),
+                          child: GestureDetector(
+                            onTap: () {
+                              // send massage
+                              _sendMessage(ChatMessage(
+                                user: currentUser,
+                                createdAt: DateTime.now(),
+                                text: question,
+                              ));
+                            },
+                            child: CircleAvatar(
+                              radius: 12.r,
+                              backgroundColor: colors.backbackground,
+                              child: Icon(
+                                Icons.send,
+                                size: 15.sp,
+                                color: colors.textcolor,
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        // send voice icon
+
+                        Padding(
+                          padding: EdgeInsets.only(left: 5.w),
+                          child: GestureDetector(
+                            onTap: _speechToText.isNotListening
+                                ? _startListening
+                                : _stopListening,
+                            child: CircleAvatar(
+                              radius: 12.r,
+                              backgroundColor: colors.backbackground,
+                              child: Icon(
+                                Icons.mic,
+                                size: 15.sp,
+                                color: colors.textcolor,
+                              ),
+                            ),
+                          ),
+                        )
+                        // send image icon
+
+                        ,
+                        Padding(
+                          padding: EdgeInsets.only(left: 5.w),
+                          child: GestureDetector(
+                            onTap: _sendMediaMessageWeb,
+                            child: CircleAvatar(
+                              radius: 12.r,
+                              backgroundColor: colors.backbackground,
+                              child: Icon(
+                                Icons.image,
+                                size: 15.sp,
+                                color: colors.textcolor,
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                : Container(
+                    height: MediaQuery.sizeOf(context).height * 0.08,
+
+                    margin: EdgeInsets.only(left: 80, right: 40, bottom: 5),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20.r),
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [colors.color1, colors.color2],
                       ),
+                      // image: DecorationImage(
+                      //   image: AssetImage('assets/back.gif'),
+                      //   fit: BoxFit.cover,
+                      // ),
+                    ),
+                    child: Row(
+                      children: [
+                        // additional icon
+                        Padding(
+                          padding: EdgeInsets.only(left: 15.w),
+                          child: GestureDetector(
+                            onTap: () {
+                              print('add icon');
+                              context.navigateTo(router.ai_convertion);
+                            },
+                            child: CircleAvatar(
+                              radius:
+                                  ResponsiveValue(context, conditionalValues: [
+                                Condition.equals(name: MOBILE, value: 10.0),
+                                Condition.equals(name: TABLET, value: 10.0),
+                                Condition.equals(name: DESKTOP, value: 20.0),
+                                Condition.equals(name: '4K', value: 25.0)
+                              ]).value,
+                              backgroundColor: colors.backbackground,
+                              child: Icon(
+                                Icons.add,
+                                size: context.smallfontsize,
+                                color: colors.textcolor,
+                              ),
+                            ),
+                          ),
+                        ),
+                        // send massage
+
+                        Padding(
+                          padding: EdgeInsets.only(left: 5.w),
+                          child: Container(
+                            width: context.width(0.35),
+                            child: TextFormField(
+                              onChanged: (value) {
+                                question = value;
+                              },
+                              //  controller: massageController,
+                              decoration: InputDecoration(
+                                hintText: _speechToText.isListening
+                                    ? _lastWords
+                                    : " Ask me anything...",
+                                hintStyle: TextStyle(
+                                  color: colors.textcolor,
+                                  fontSize: context.smallfontsize,
+                                ),
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        // send icon
+
+                        Padding(
+                          padding: EdgeInsets.only(left: 5.w),
+                          child: GestureDetector(
+                            onTap: () {
+                              // send massage
+                              _sendMessage(ChatMessage(
+                                user: currentUser,
+                                createdAt: DateTime.now(),
+                                text: question,
+                              ));
+                            },
+                            child: CircleAvatar(
+                              radius:
+                                  ResponsiveValue(context, conditionalValues: [
+                                Condition.equals(name: MOBILE, value: 10.0),
+                                Condition.equals(name: TABLET, value: 10.0),
+                                Condition.equals(name: DESKTOP, value: 20.0),
+                                Condition.equals(name: '4K', value: 25.0)
+                              ]).value,
+                              backgroundColor: colors.backbackground,
+                              child: Icon(
+                                Icons.send,
+                                size: context.smallfontsize,
+                                color: colors.textcolor,
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        // send voice icon
+
+                        Padding(
+                          padding: EdgeInsets.only(left: 5.w),
+                          child: GestureDetector(
+                            onTap: _speechToText.isNotListening
+                                ? _startListening
+                                : _stopListening,
+                            child: CircleAvatar(
+                              radius:
+                                  ResponsiveValue(context, conditionalValues: [
+                                Condition.equals(name: MOBILE, value: 10.0),
+                                Condition.equals(name: TABLET, value: 10.0),
+                                Condition.equals(name: DESKTOP, value: 20.0),
+                                Condition.equals(name: '4K', value: 25.0)
+                              ]).value,
+                              backgroundColor: colors.backbackground,
+                              child: Icon(
+                                Icons.mic,
+                                size: context.smallfontsize,
+                                color: colors.textcolor,
+                              ),
+                            ),
+                          ),
+                        )
+                        // send image icon
+
+                        ,
+                        Padding(
+                          padding: EdgeInsets.only(left: 5.w),
+                          child: GestureDetector(
+                            onTap: _sendMediaMessageWeb,
+                            child: CircleAvatar(
+                              radius:
+                                  ResponsiveValue(context, conditionalValues: [
+                                Condition.equals(name: MOBILE, value: 10.0),
+                                Condition.equals(name: TABLET, value: 10.0),
+                                Condition.equals(name: DESKTOP, value: 20.0),
+                                Condition.equals(name: '4K', value: 25.0)
+                              ]).value,
+                              backgroundColor: colors.backbackground,
+                              child: Icon(
+                                Icons.image,
+                                size: context.smallfontsize,
+                                color: colors.textcolor,
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
                     ),
                   ),
+           
+          backgroundColor: colors.backbackground,
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                     context.height_box(0.03),
 
-                  // send voice icon
-
-                  Padding(
-                    padding: EdgeInsets.only(left: 5.w),
-                    child: GestureDetector(
-                      onTap:   _speechToText.isNotListening
-                  ? _startListening
-                  : _stopListening,
-                      child: CircleAvatar(
-                        radius: ResponsiveValue(context, conditionalValues: [
-                          Condition.equals(name: MOBILE, value: 10.0),
-                          Condition.equals(name: TABLET, value: 10.0),
-                          Condition.equals(name: DESKTOP, value: 20.0),
-                          Condition.equals(name: '4K', value: 25.0)
-                        ]).value,
-                        backgroundColor: colors.backbackground,
-                        child: Icon(
-                          Icons.mic,
-                          size: context.smallfontsize,
-                          color: colors.textcolor,
+              // Courses text   
+              Container(
+                height: context.height(0.1),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                  color: colors.background
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    children: [
+                      Text(
+                        'Ai model',
+                        style: textstyle.title.copyWith(
+                          fontSize: context.fontSize(20),
                         ),
                       ),
-                    ),
-                  )
-                  // send image icon
-
-                   ,Padding(
-                    padding: EdgeInsets.only(left: 5.w),
-                    child: GestureDetector(
-                      onTap:  _sendMediaMessageWeb,
-                      child: CircleAvatar(
-                        radius: ResponsiveValue(context, conditionalValues: [
-                          Condition.equals(name: MOBILE, value: 10.0),
-                          Condition.equals(name: TABLET, value: 10.0),
-                          Condition.equals(name: DESKTOP, value: 20.0),
-                          Condition.equals(name: '4K', value: 25.0)
-                        ]).value,
-                        backgroundColor: colors.backbackground,
-                        child: Icon(
-                          Icons.image,
-                          size: context.smallfontsize,
-                          color: colors.textcolor,
-                        ),
-                      ),
-                    ),
-                  )
-                 
+                     
+                    ],
+                  ),
+                ),
+              ),
+                context.height_box(0.03),
                 
-                ],
+             // screen container
+             Container(
+              decoration: BoxDecoration(
+                //color: colors.background,
+                borderRadius: BorderRadius.circular(30),
               ),
-            ),
-      
-      body:
-          //_buildUI(),
-          SingleChildScrollView(
-        child: Column(
-          children: [
-            ClipPath(
-          clipper: ClipPathClass(),
-          child: Container(
-            height: context.height(0.1),
-            width: double.infinity,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [colors.color1, colors.color2],
-              ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(23.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: Column(
                 children: [
-                  GestureDetector(
-                    onTap: () {
-                      context.pop();
-                    },
-                    child: CircleAvatar(
-                      backgroundColor: colors.color1,
-                      radius: 20,
-                      // add person icon
-                      child: Icon(
-                        Icons.arrow_back_sharp,
-                        color: Colors.white,
+             context.height_box(0.03),
+               Container(
+                      height: MediaQuery.sizeOf(context).height * 0.8,
+                      child: ListView.builder(
+                        reverse: true,
+                        itemCount: messages.length,
+                        itemBuilder: (context, index) {
+                          return messages[index].user.firstName == "Gemini"
+                              ? Padding(
+                                  padding: EdgeInsets.only(
+                                      left: 10.w,
+                                      right: 100.w,
+                                      top: 10.h,
+                                      bottom: 10.h),
+                                  child: massage2(messages[index]),
+                                )
+                              : Padding(
+                                  padding: EdgeInsets.only(
+                                      left: 100.w,
+                                      right: 10.w,
+                                      top: 10.h,
+                                      bottom: 10.h),
+                                  child: massage2(messages[index]),
+                                );
+                        },
                       ),
                     ),
-                  ),
-                  Text(
-                    'Course details',
-                    style: textstyle.title.copyWith(color: Colors.white),
-                  ),
-                  CircleAvatar(
-                    radius: 20,
-                    // add person icon
-                    child: Icon(
-                      Icons.favorite,
-                      color: Colors.white,
-                    ),
-                  ),
+              context.height_box(0.03),
+              context.height_box(0.03),
+        
+        
+        
                 ],
               ),
+             )
+              
+              ],
             ),
           ),
-        ),
-      
-            Container(
-              height: MediaQuery.sizeOf(context).height * 0.8,
-              child: ListView.builder(
-                reverse: true,
-                itemCount: messages.length,
-                itemBuilder: (context, index) {
-                  return messages[index].user.firstName=="Gemini"? 
-                  Padding(
-                    padding:  EdgeInsets.only(left: 10.w,right: 100.w,top: 10.h,bottom: 10.h),
-                    child: massage(messages[index]),
-                  )
-                  :Padding(
-                    padding:  EdgeInsets.only(left: 100.w,right: 10.w,top: 10.h,bottom: 10.h),
-                    child: massage(messages[index]),
-                  )
-                  ;
-                },
-              ),
-            )
-          ],
-        ),
-      ),
-    );
+        ));
   }
 }
 
-
-Widget massage(ChatMessage message){
+Widget massage(ChatMessage message) {
   return ListTile(
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(10),
     ),
     tileColor: Colors.grey[200],
+    contentPadding: EdgeInsets.all(10),
+    title: Text(message.user.firstName!),
+    subtitle: Text(message.text),
+  );
+}
+Widget massage2(ChatMessage message) {
+  return ListTile(
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(10),
+    ),
+    tileColor:colors.background,
     contentPadding: EdgeInsets.all(10),
     title: Text(message.user.firstName!),
     subtitle: Text(message.text),

@@ -5,6 +5,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:lms/core/theming/extension.dart';
+import 'package:lms/features/Lms/ui/widgets/webtemplete.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:siri_wave/siri_wave.dart';
 import 'package:lms/core/theming/extension.dart';
 import 'package:lms/core/theming/style.dart';
@@ -133,7 +135,7 @@ class _ai_converstionState extends State<ai_converstion> {
           );
           setState(() {
             speak(message.text);
-               responseText = message.text;
+            responseText = message.text;
             print(responseText);
             showResponse = true;
 
@@ -189,7 +191,7 @@ class _ai_converstionState extends State<ai_converstion> {
 
           setState(() {
             speak(message.text);
-              responseText = message.text;
+            responseText = message.text;
             print(responseText);
             showResponse = true;
             messages = [message, ...messages];
@@ -248,7 +250,7 @@ class _ai_converstionState extends State<ai_converstion> {
           );
           setState(() {
             speak(message.text);
-             speak(message.text);
+            speak(message.text);
             responseText = message.text;
             print(responseText);
             showResponse = true;
@@ -267,7 +269,135 @@ class _ai_converstionState extends State<ai_converstion> {
     final controller = SiriWaveController(
       speed: 0.05,
     );
-    return Scaffold(
+    return ResponsiveBreakpoints.of(context).isMobile
+        ? Scaffold(
+            backgroundColor: Colors.black,
+            body: Row(
+              children: [
+                context.width_box(0.2),
+                Column(
+                  children: [
+                    context.height_box(0.1),
+                    SiriWave(
+                      controller: controller,
+                      style: SiriWaveStyle.ios_9,
+                      options: SiriWaveOptions(
+                        height: context.height(0.3),
+                        width: context.width(0.6),
+                      ),
+                    ),
+                    context.height_box(0.1),
+                    Container(
+                      width: context.width(0.5),
+                      child: Text(
+                        showResponse
+                            ? responseText
+                            : _speechToText.isListening
+                                ? _lastWords
+                                : " Ask me anything...",
+                        style: textstyle.subtitle.copyWith(
+                          color: showResponse ? Colors.grey[500] : Colors.white,
+                          fontSize: context.mediumfontsize,
+                        ),
+                      ),
+                    ),
+                    context.height_box(0.2),
+                    // circle avatar with mic icon
+                    GestureDetector(
+                      onTap: () {
+                        if (_speechToText.isListening) {
+                          _stopListening();
+                          recording = false;
+                        } else {
+                          _startListening();
+                          showResponse = false;
+                          recording = true;
+                        }
+                      },
+                      child: CircleAvatar(
+                        radius: 30,
+                        backgroundColor:
+                            recording ? Colors.white : colors.color3,
+                        child: recording
+                            ? Icon(
+                                Icons.stop,
+                                color: Colors.black,
+                              )
+                            : Icon(
+                                Icons.mic,
+                                color: Colors.black,
+                              ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ))
+        : webtemplete(widegt: Scaffold(
+        backgroundColor: Colors.black,
+        body: Row(
+          children: [
+            context.width_box(0.1),
+            Column(
+              children: [
+                context.height_box(0.1),
+                SiriWave(
+                  controller: controller,
+                  style: SiriWaveStyle.ios_9,
+                  options: SiriWaveOptions(
+                    height: context.height(0.3),
+                    width: context.width(0.4),
+                  ),
+                ),
+                context.height_box(0.1),
+                Container(
+                  width: context.width(0.5),
+                  child: Text(
+                    showResponse ? responseText :
+                    _speechToText.isListening
+                        ? _lastWords
+                        : " Ask me anything...",
+                    style: textstyle.subtitle.copyWith(
+                      color:showResponse ? Colors.grey[500]:Colors.white,
+                      fontSize: context.fontSize(17),
+                    ),
+                  ),
+                ),
+                context.height_box(0.2),
+                // circle avatar with mic icon
+                GestureDetector(
+                  onTap: () {
+                    if (_speechToText.isListening) {
+                      _stopListening();
+                      recording = false;
+                    } else {
+                      _startListening();
+                      showResponse = false;
+                      recording = true;
+                    }
+                  },
+                  child: CircleAvatar(
+                    radius: 30,
+                    backgroundColor:recording? Colors.white:colors.color3,
+                    child:recording?
+                    Icon(
+                      Icons.stop,
+                      color: Colors.black,
+                    )
+                    : Icon(
+                      Icons.mic,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        )));
+  }
+}
+/*
+Scaffold(
         backgroundColor: Colors.black,
         body: Row(
           children: [
@@ -328,5 +458,4 @@ class _ai_converstionState extends State<ai_converstion> {
             ),
           ],
         ));
-  }
-}
+        */

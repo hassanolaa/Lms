@@ -14,6 +14,7 @@ import '../../features/Lms/ui/screens/signup.dart';
 import '../../features/Lms/ui/screens/test.dart';
 import '../../features/Lms/ui/widgets/navi.dart';
 import '../../features/Lms/ui/widgets/tool.dart';
+import '../../features/chat/view/presentation/screens/massages.dart';
 
 extension Router on BuildContext {
   void navigateTo(String routeName, {Map<String, dynamic>? arguments}) {
@@ -59,7 +60,11 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => ai_converstion());
        case router.tools:
         return MaterialPageRoute(builder: (_) => tool(url:url ,));
-          
+       case router.signin2:
+       // return MaterialPageRoute(builder: (_) => SignIn());
+        case router.massages:
+        return MaterialPageRoute(builder: (_) => massages());
+         
         
               
 
@@ -98,6 +103,13 @@ class router {
   static const String test = '/test';
   static const String ai_convertion = '/ai_convertion';
   static const String tools = '/tools';
+  static const String signin2 = '/signin2';
+
+
+
+  static const String massages= '/massages';
+
+
 
 }
 

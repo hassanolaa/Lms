@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lms/core/theming/extension.dart';
 import 'package:lms/core/theming/style.dart';
 import 'package:lms/core/theming/colors.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 
 class home extends StatefulWidget {
@@ -18,7 +19,8 @@ class _homeState extends State<home> {
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
+    return  ResponsiveBreakpoints.of(context).isMobile
+        ?    Scaffold(
       body: SingleChildScrollView(
         child: SafeArea(
           child: Column(children: [
@@ -318,7 +320,233 @@ class _homeState extends State<home> {
            ],),
         ),
       )
-    );
+    )
+ 
+        :Scaffold(
+          backgroundColor: colors.backbackground,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+           context.height_box(0.03),
+            // search bar with search icon and filter button   
+            Container(
+              height: context.height(0.1),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+                color: colors.background
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+              
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Row(
+                            children: [
+                              Icon(Icons.search),
+                              context.width_box(0.02),
+                              Expanded(
+                                child: TextField(
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: 'Search for courses',
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    context.width_box(0.02),
+                    Container(
+                      height: 50,
+                      width: 50,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Icon(Icons.filter_list),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+           context.height_box(0.03),
+           // screen container
+           Container(
+            decoration: BoxDecoration(
+              color: colors.background,
+              borderRadius: BorderRadius.circular(30),
+            ),
+            child: Column(
+              children: [
+           context.height_box(0.03),
+           // list view builder for notifications horizontal
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Notifications',
+                    style: textstyle.title.copyWith(
+                      fontSize: context.fontSize(20),
+                    
+                    ),
+                  ),
+                  Text(
+                    'View All',
+                    style: textstyle.buttonText.copyWith(
+                      fontSize: context.fontSize(12),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            context.height_box(0.03),
+            // list view builder for notifications
+            Container(
+              height: context.height(0.2),
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: 5,
+                itemBuilder: (context, index) {
+                  return Container(
+                    width: context.width(0.2),
+                    height: context.height(0.15),
+                    margin: EdgeInsets.only(left: 20),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Column(
+                      children: [
+                      ],
+                    ),
+                  );
+                },
+              ),
+            )
+            ,context.height_box(0.03),
+            // list view builder for courses horizontal
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Courses',
+                    style: textstyle.title.copyWith(
+                      fontSize: context.fontSize(20),
+                    ),
+                  ),
+                  Text(
+                    'View All',
+                    style: textstyle.buttonText.copyWith(
+                      fontSize: context.fontSize(12),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            context.height_box(0.03),
+            // list view builder for courses
+            Container(
+              height: context.height(0.3),
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: 5,
+                itemBuilder: (context, index) {
+                  return Container(
+                    width: context.width(0.4),
+                    height: context.height(0.15),
+                    margin: EdgeInsets.only(left: 20),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Column(
+                      children: [
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+            context.height_box(0.03),
+            // grid view builder for recently added
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Recently Added',
+                    style: textstyle.title.copyWith(
+                      fontSize: context.fontSize(20),
+                    ),
+                  ),
+                  Text(
+                    'View All',
+                    style: textstyle.buttonText.copyWith(
+                      fontSize: context.fontSize(12),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            context.height_box(0.03),
+            // grid view builder for recently added
+            Container(
+              height: context.height(0.4)*2,
+              child: Padding(
+                padding:  EdgeInsets.only(left:context.width(0.02),right:context.width(0.02)),
+                child: GridView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                    childAspectRatio: 1.5,
+                  ),
+                  itemCount: 5,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Column(
+                        children: [
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+            context.height_box(0.03),
+
+
+
+              ],
+            ),
+           )
+            
+          ],
+        ),
+      )
+        );
+    
   }
 }
 

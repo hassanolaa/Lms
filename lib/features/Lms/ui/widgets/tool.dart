@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lms/core/routing/router.dart';
+import 'package:lms/features/Lms/ui/widgets/webtemplete.dart';
 import 'package:webviewx/webviewx.dart';
 
 class tool extends StatefulWidget {
@@ -36,7 +37,7 @@ class _toolState extends State<tool> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: WebViewX(
+      body:webtemplete(widegt:  WebViewX(
         initialContent:
            url,
         initialSourceType: SourceType.URL,
@@ -44,7 +45,7 @@ class _toolState extends State<tool> {
           webviewController = controller;
           _setUrl();
         },
-      ),
+      ),)
     );
   }
 }

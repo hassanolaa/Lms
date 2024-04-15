@@ -5,6 +5,7 @@ import 'package:lms/core/routing/router.dart';
 import 'package:lms/core/theming/extension.dart';
 import 'package:lms/core/theming/style.dart';
 import 'package:lms/core/theming/colors.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 import 'home.dart';
 
@@ -20,7 +21,8 @@ class courses extends StatefulWidget {
 class _coursesState extends State<courses> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ResponsiveBreakpoints.of(context).isMobile
+        ?  Scaffold(
       body: SingleChildScrollView(
         child: SafeArea(
           child: Column(
@@ -130,6 +132,113 @@ class _coursesState extends State<courses> {
           ),
         ),
       )
-    );
+    )
+        : Scaffold(
+            backgroundColor: colors.backbackground,
+     body:   SingleChildScrollView(
+        child: Column(
+          children: [
+           context.height_box(0.03),
+            // Courses text   
+            Container(
+              height: context.height(0.1),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+                color: colors.background
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  children: [
+                    Text(
+                      'Courses',
+                      style: textstyle.title.copyWith(
+                        fontSize: context.fontSize(20),
+                      ),
+                    ),
+                   
+                  ],
+                ),
+              ),
+            ),
+           context.height_box(0.03),
+           // screen container
+           Container(
+            decoration: BoxDecoration(
+              color: colors.background,
+              borderRadius: BorderRadius.circular(30),
+            ),
+            child: Column(
+              children: [
+           context.height_box(0.03),
+            // grid view builder for courses
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '2nd level courses - 2nd semester',
+                    style: textstyle.title.copyWith(
+                      fontSize: context.fontSize(20),
+                    ),
+                  ),
+                
+                ],
+              ),
+            ),
+            context.height_box(0.03),
+            // grid view builder for recently added
+            Container(
+              height: context.height(0.4)*2,
+              child: Padding(
+                padding:  EdgeInsets.only(left:context.width(0.02),right:context.width(0.02)),
+                child: GridView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                    childAspectRatio: 1.5,
+                  ),
+                  itemCount: 5,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                        context.navigateTo(router.course);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Column(
+                          children: [
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+            context.height_box(0.03),
+
+
+
+              ],
+            ),
+           )
+            
+          ],
+        ),
+      )
+       
+
+  );
+    
+    
+    
+    
   }
 }
