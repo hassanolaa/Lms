@@ -1,94 +1,93 @@
 import 'package:flutter/material.dart';
+import 'package:lms/features/Lms/ui/widgets/webtemplete.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
-// import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:webviewx/webviewx.dart';
 
-// class pdf_view extends StatefulWidget {
-//   const pdf_view({super.key});
+class pdf_view extends StatefulWidget {
+  const pdf_view({super.key});
 
-//   @override
-//   State<pdf_view> createState() => _pdf_viewState();
-// }
+  @override
+  State<pdf_view> createState() => _pdf_viewState();
+}
 
-// class _pdf_viewState extends State<pdf_view> {
-//  late final WebViewController _controller;  
+class _pdf_viewState extends State<pdf_view> {
  
-// @override
-//   void initState() {
-//     super.initState();
+ late WebViewXController webviewController;
+//late  final WebViewController cotroller;
+  //..setJavaScriptMode(JavaScriptMode.disabled)
+  //..loadRequest(Uri.parse('https://pub.dev/packages/webview_flutter/example'));
 
-//     // #docregion platform_features
-//     late final PlatformWebViewControllerCreationParams params;
+  void _setUrl() {
+    webviewController.loadContent(
+      '''
+      <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Embedded PDF</title>
+</head>
+<body>
+
+    <embed src="https://www.utstat.toronto.edu/mikevans/jeffrosenthal/book.pdf" type="application/pdf" width="100%" height="600px" />
+
+</body>
+</html>
+      ''',
+      //'https://chataigpt.org/',
+      SourceType.HTML,
+    );
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    webviewController.dispose();
+    super.dispose();
+  }
+
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Pdf View'),
+      
+      ),
+        body:
+    
    
-  
-//       params = const PlatformWebViewControllerCreationParams();
-  
+        webtemplete(widegt:  WebViewX(
+        initialContent:
+          '''
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Embedded PDF</title>
+</head>
+<body>
 
-//     final WebViewController controller =
-//         WebViewController.fromPlatformCreationParams(params);
-//     // #enddocregion platform_features
+    <embed src="https://www.utstat.toronto.edu/mikevans/jeffrosenthal/book.pdf" type="application/pdf" width="100%" height="600px" />
 
-//     controller
-//       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-//       ..setBackgroundColor(const Color(0x00000000))
-//       ..setNavigationDelegate(
-//         NavigationDelegate(
-//           onProgress: (int progress) {
-//             debugPrint('WebView is loading (progress : $progress%)');
-//           },
-//           onPageStarted: (String url) {
-//             debugPrint('Page started loading: $url');
-//           },
-//           onPageFinished: (String url) {
-//             debugPrint('Page finished loading: $url');
-//           },
-//           onWebResourceError: (WebResourceError error) {
-//             debugPrint('''
-// Page resource error:
-//   code: ${error.errorCode}
-//   description: ${error.description}
-//   errorType: ${error.errorType}
-//   isForMainFrame: ${error.isForMainFrame}
-//           ''');
-//           },
-//           onNavigationRequest: (NavigationRequest request) {
-//             if (request.url.startsWith('https://www.youtube.com/')) {
-//               debugPrint('blocking navigation to ${request.url}');
-//               return NavigationDecision.prevent;
-//             }
-//             debugPrint('allowing navigation to ${request.url}');
-//             return NavigationDecision.navigate;
-//           },
-//           onUrlChange: (UrlChange change) {
-//             debugPrint('url change to ${change.url}');
-//           },
-//           onHttpAuthRequest: (HttpAuthRequest request) {
-//           },
-//         ),
-//       )
-//       ..addJavaScriptChannel(
-//         'Toaster',
-//         onMessageReceived: (JavaScriptMessage message) {
-//           ScaffoldMessenger.of(context).showSnackBar(
-//             SnackBar(content: Text(message.message)),
-//           );
-//         },
-//       )
-//       ..loadRequest(Uri.parse('https://flutter.dev'));
-
-   
-//     // #enddocregion platform_features
-
-//     _controller = controller;
-//   }
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//         body: WebViewWidget(controller: _controller),);
-//   }
-// }
-  
+</body>
+</html>
+''',
+        initialSourceType: SourceType.HTML,
+        onWebViewCreated: (controller) {
+          webviewController = controller;
+          _setUrl();
+        },
+      ),
+        )
+      );
+  }
+}
+ 

@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lms/core/theming/colors.dart';
 import 'package:lms/core/theming/extension.dart';
 import 'package:lms/core/theming/style.dart';
-import 'package:lms/features/Lms/data/firebase.dart';
+import 'package:lms/features/Lms/data/network/firebase.dart';
 import 'package:lms/features/Lms/ui/screens/ai_home.dart';
 import 'package:lms/features/Lms/ui/screens/courses.dart';
 import 'package:lms/features/Lms/ui/screens/home.dart';
@@ -13,6 +13,7 @@ import 'package:lms/features/chat/view/presentation/widgets/navi.dart';
 import '../../../chat/view/presentation/screens/massages.dart';
 import '../../../chat/view/presentation/screens/signIn.dart';
 import '../../../chat/view/presentation/screens/signup.dart';
+import '../../../quiz/screens/welcome_screen.dart';
 import '../screens/ai.dart';
 import '../screens/profile.dart';
 
@@ -23,7 +24,9 @@ List<Widget> _SelectedTab = [
 //  status(),
   ai_home(),
 // Container(),
-  signIn(),
+ // signIn(),
+welcome_screen(),
+ //JoinScreen(),
   //calls(),
   profile(),
 ];
@@ -44,6 +47,7 @@ class _naviState extends State<navi> {
       _selectedTab = _SelectedTab[i];
     });
   }
+  
 
   @override
   void initState() {
@@ -276,7 +280,11 @@ class _naviState extends State<navi> {
                           width: context.width(.06),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(25.r),
-                            color: colors.background,
+                           // color: colors.background,
+                           image: DecorationImage(
+                             image: AssetImage(colors.background_image),
+                             fit: BoxFit.cover,
+                           ),
                           ),
                           child: Column(children: [
                             SizedBox(
@@ -295,10 +303,10 @@ class _naviState extends State<navi> {
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15.r),
                                   color: selected == 0
-                                      ? colors.color2
+                                      ? colors.color1
                                       : Colors.transparent,
                                   border: Border.all(
-                                      color: colors.color2, width: 1),
+                                      color: colors.color1, width: 1),
                                 ),
                                 child: Icon(
                                   Icons.home_outlined,
@@ -322,10 +330,10 @@ class _naviState extends State<navi> {
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15.r),
                                   color: selected == 1
-                                      ? colors.color2
+                                      ? colors.color1
                                       : Colors.transparent,
                                   border: Border.all(
-                                      color: colors.color2, width: 1),
+                                      color: colors.color1, width: 1),
                                 ),
                                 child: Icon(
                                   CupertinoIcons.book_circle,
@@ -349,15 +357,14 @@ class _naviState extends State<navi> {
                                 width: context.width(.08),
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: selected == 2
-                                      ? colors.color2
-                                      : Colors.transparent,
+                                  color: colors.color3,
+                                      
                                   border: Border.all(
-                                      color: colors.color2, width: 1),
+                                      color: colors.color3, width: 1),
                                 ),
                                 child: Icon(
                                   Icons.auto_fix_high_outlined,
-                                  color: colors.color3,
+                                  color: Colors.white,
                                 ),
                               ),
                             ),
@@ -378,10 +385,10 @@ class _naviState extends State<navi> {
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(15.r),
                                     color: selected == 3
-                                        ? colors.color2
+                                        ? colors.color1
                                         : Colors.transparent,
                                     border: Border.all(
-                                        color: colors.color2, width: 1),
+                                        color: colors.color1, width: 1),
                                   ),
                                   child: Icon(
                                     CupertinoIcons.chat_bubble_2,
@@ -405,10 +412,10 @@ class _naviState extends State<navi> {
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15.r),
                                   color: selected == 4
-                                      ? colors.color2
+                                      ? colors.color1
                                       : Colors.transparent,
                                   border: Border.all(
-                                      color: colors.color2, width: 1),
+                                      color: colors.color1, width: 1),
                                 ),
                                 child: Icon(
                                   Icons.person_outline_outlined,
@@ -434,10 +441,10 @@ class _naviState extends State<navi> {
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(15.r),
                                     color: selected == 3
-                                        ? colors.color2
+                                        ? colors.color1
                                         : Colors.transparent,
                                     border: Border.all(
-                                        color: colors.color2, width: 1),
+                                        color: colors.color1, width: 1),
                                   ),
                                   child: Icon(
                                     Icons.logout_outlined,
@@ -586,6 +593,16 @@ class event extends StatelessWidget {
   String eventduration;
   String evnetmarks;
 
+  Color setColor() {
+    if (eventtype.toLowerCase() == 'quiz') {
+      return colors.color1;
+    } else if (eventtype.toLowerCase() == 'assignment') {
+      return colors.color2;
+    } else {
+      return colors.color3;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -606,7 +623,7 @@ class event extends StatelessWidget {
                     width: context.width(.06),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20.r),
-                        color: colors.color1),
+                        color: setColor()),
                     child: Center(
                       child: Text(
                         eventtype,

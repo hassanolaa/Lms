@@ -555,6 +555,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.1.2"
+  flutter_sliding_up_panel:
+    dependency: "direct main"
+    description:
+      name: flutter_sliding_up_panel
+      sha256: "94f928973d83e146bbc52051e2d9f2a7ed7a5c9e7f04b54d835fff2e41d6cb99"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.1"
+  flutter_smart_dialog:
+    dependency: "direct main"
+    description:
+      name: flutter_smart_dialog
+      sha256: e9ee69eeac16165d142f1974b4db05ca9846cffafb7c94674a38ec07d7e6cda1
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.9.6"
   flutter_svg:
     dependency: "direct main"
     description:
@@ -576,6 +592,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_timer_countdown:
+    dependency: "direct main"
+    description:
+      name: flutter_timer_countdown
+      sha256: "0c73e1593ad7949c007752199a17e7ed50bb581568743dbc32f061f49873219e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.7"
   flutter_tts:
     dependency: "direct main"
     description:
@@ -1157,6 +1181,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.27.7"
+  screen_retriever:
+    dependency: transitive
+    description:
+      name: screen_retriever
+      sha256: "6ee02c8a1158e6dae7ca430da79436e3b1c9563c8cf02f524af997c201ac2b90"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.9"
   sdp_transform:
     dependency: transitive
     description:
@@ -1602,6 +1634,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.0.9"
+  window_manager:
+    dependency: "direct main"
+    description:
+      name: window_manager
+      sha256: b3c895bdf936c77b83c5254bec2e6b3f066710c1f89c38b20b8acc382b525494
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.8"
   wolt_modal_sheet:
     dependency: "direct main"
     description:

@@ -71,11 +71,14 @@ dependencies:
   flutter_svg: ^2.0.2
   videosdk: any
   date_time_format: ^2.0.1
-  
+  flutter_sliding_up_panel: ^2.1.1
+  flutter_smart_dialog: ^4.9.4
+  flutter_timer_countdown: ^1.0.7
+ # touch_ripple_effect: ^2.2.3
+  window_manager: ^0.3.4
+ # webviewx_plus: ^0.5.0
 
-
-
-  #syncfusion_flutter_pdfviewer: ^24.1.45
+  #syncfusion_flutter_pdfviewer: ^20.3.56
  
 
 dev_dependencies:

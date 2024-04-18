@@ -14,6 +14,7 @@ import 'firebase_options.dart';
 // AIzaSyBdLTlDPzseibSNQqdn6Eiikhi37eZW0Oc
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
+
   Gemini.init(
     apiKey: "AIzaSyBdLTlDPzseibSNQqdn6Eiikhi37eZW0Oc",
   );

@@ -1,4 +1,5 @@
 
+import 'package:lms/features/Lms/data/network/firebase.dart';
 
  import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lms/core/theming/extension.dart';
 import 'package:lms/core/theming/colors.dart';
 import 'package:lms/core/theming/style.dart';
-import '../../../chat/view/presentation/screens/profile.dart';
+import 'package:lms/features/Lms/ui/screens/profile.dart';
 import '../../../chat/view/presentation/screens/signIn.dart';
 import '../screens/ai_home.dart';
 import '../screens/courses.dart';
@@ -66,7 +67,11 @@ class webtemplete extends StatefulWidget {
                           width: context.width(.06),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(25.r),
-                            color: colors.background,
+                          //  color: colors.background,
+                          image: DecorationImage(
+                            image: AssetImage(colors.background_image),
+                            fit: BoxFit.cover,
+                          ),
                           ),
                           child: Column(children: [
                             SizedBox(
@@ -85,10 +90,10 @@ class webtemplete extends StatefulWidget {
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15.r),
                                   color: selected == 0
-                                      ? colors.color2
+                                      ? colors.color1
                                       : Colors.transparent,
                                   border:
-                                      Border.all(color: colors.color2, width: 1),
+                                      Border.all(color: colors.color1, width: 1),
                                 ),
                                 child: Icon(
                                   Icons.home_outlined,
@@ -112,10 +117,10 @@ class webtemplete extends StatefulWidget {
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15.r),
                                   color: selected == 1
-                                      ? colors.color2
+                                      ? colors.color1
                                       : Colors.transparent,
                                   border:
-                                      Border.all(color: colors.color2, width: 1),
+                                      Border.all(color: colors.color1, width: 1),
                                 ),
                                 child: Icon(
                                   CupertinoIcons.book_circle,
@@ -139,15 +144,14 @@ class webtemplete extends StatefulWidget {
                                 width: context.width(.08),
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: selected == 2
-                                      ? colors.color2
-                                      : Colors.transparent,
+                                  color: colors.color3
+                                      ,
                                   border:
-                                      Border.all(color: colors.color2, width: 1),
+                                      Border.all(color: colors.color3, width: 1),
                                 ),
                                 child: Icon(
                                   Icons.auto_fix_high_outlined,
-                                  color: colors.color3,
+                                  color: Colors.white,
                                 ),
                               ),
                             ),
@@ -168,10 +172,10 @@ class webtemplete extends StatefulWidget {
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(15.r),
                                     color: selected == 3
-                                        ? colors.color2
+                                        ? colors.color1
                                         : Colors.transparent,
                                     border:
-                                        Border.all(color: colors.color2, width: 1),
+                                        Border.all(color: colors.color1, width: 1),
                                   ),
                                   child: Icon(
                                     CupertinoIcons.chat_bubble_2,
@@ -195,10 +199,10 @@ class webtemplete extends StatefulWidget {
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15.r),
                                   color: selected == 4
-                                      ? colors.color2
+                                      ? colors.color1
                                       : Colors.transparent,
                                   border:
-                                      Border.all(color: colors.color2, width: 1),
+                                      Border.all(color: colors.color1, width: 1),
                                 ),
                                 child: Icon(
                                   Icons.person_outline_outlined,
@@ -224,10 +228,10 @@ class webtemplete extends StatefulWidget {
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(15.r),
                                     color: selected == 3
-                                        ? colors.color2
+                                        ? colors.color1
                                         : Colors.transparent,
                                     border:
-                                        Border.all(color: colors.color2, width: 1),
+                                        Border.all(color: colors.color1, width: 1),
                                   ),
                                   child: Icon(
                                  Icons.logout_outlined,
@@ -304,24 +308,34 @@ class webtemplete extends StatefulWidget {
                                 ),
                               ],
                             ),
-                            Expanded(
-                              child: ListView.builder(
-                                itemCount: 10,
-                                itemBuilder: (context, index) {
-                                  return Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: event(
-                                      eventtype: 'Quiz',
-                                      eventname: 'Quiz 1',
-                                      eventdate: '12/12/2021',
-                                      eventdescription: 'Quiz 1 description',
-                                      eventduration: ' 30 min',
-                                      evnetmarks: ' 10 marks',
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
+                           Expanded(
+                                child: StreamBuilder(
+                                    stream: firebase.getSnapShot("upcoming"),
+                                    builder: ((context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return CircularProgressIndicator();
+                                      } else {
+                                        return ListView.builder(
+                                          itemCount: snapshot.data!.docs.length,
+                                          itemBuilder: (context, index) {
+                                            return Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: event(
+                                                eventtype: snapshot.data!.docs[index]['type'],
+                                                eventname: snapshot.data!.docs[index]['name'],
+                                                eventdate:snapshot.data!.docs[index]['date'],
+                                                eventdescription:
+                                                   snapshot.data!.docs[index]['description'],
+                                                eventduration:snapshot.data!.docs[index]['time'],
+                                                evnetmarks: snapshot.data!.docs[index]['marks'],
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      }
+                                    }))),
                           ],
                         ),
                       ),

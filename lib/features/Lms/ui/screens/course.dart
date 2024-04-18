@@ -7,13 +7,15 @@ import 'package:lms/core/theming/style.dart';
 import 'package:lms/core/theming/colors.dart';
 import 'package:lms/features/Lms/ui/widgets/webtemplete.dart';
 import 'package:responsive_framework/responsive_framework.dart';
-
+import 'package:lms/features/Lms/data/network/firebase.dart';
 import '../../../chat/view/presentation/screens/profile.dart';
 import '../../../chat/view/presentation/screens/signIn.dart';
 import '../widgets/navi.dart';
 import 'ai_home.dart';
 import 'courses.dart';
 import 'home.dart';
+import 'package:lms/features/Lms/data/models/lecture.dart';
+
 
 List<Widget> _SelectedTab = [
   home(),
@@ -118,7 +120,7 @@ class _courseState extends State<course> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           image: DecorationImage(
-                            image: AssetImage(colors.background_image),
+                            image: NetworkImage(courseModel.image!),
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -130,9 +132,9 @@ class _courseState extends State<course> {
                       children: [
                         context.width_box(0.06),
                         Text(
-                          'Course Title',
+                          courseModel.name!,
                           style:
-                              textstyle.title.copyWith(color: colors.textcolor),
+                              textstyle.title.copyWith(color: colors.textcolor,fontSize: context.fontSize(30)),
                         ),
                       ],
                     ),
@@ -147,12 +149,13 @@ class _courseState extends State<course> {
                             Icon(
                               Icons.access_time,
                               color: colors.color3,
+                              size: context.fontSize(30),
                             ),
                             context.width_box(0.02),
                             Text(
-                              '2 hours',
+                              courseModel.hours!,
                               style: textstyle.subtitle
-                                  .copyWith(color: colors.color3),
+                                  .copyWith(color: colors.color3, fontSize: context.fontSize(15)),
                             ),
                           ],
                         ),
@@ -162,12 +165,13 @@ class _courseState extends State<course> {
                             Icon(
                               Icons.person,
                               color: colors.textcolor,
+                              size: context.fontSize(30),
                             ),
                             context.width_box(0.02),
                             Text(
-                              'Instructor Name',
+                              courseModel.by!,
                               style: textstyle.subtitle
-                                  .copyWith(color: colors.textcolor),
+                                  .copyWith(color: colors.textcolor,fontSize: context.fontSize(15)),
                             ),
                           ],
                         ),
@@ -192,7 +196,7 @@ class _courseState extends State<course> {
                         Text(
                           'About this course',
                           style: textstyle.subtitle
-                              .copyWith(color: colors.textcolor),
+                              .copyWith(color: colors.textcolor, fontSize: context.fontSize(20)),
                         ),
                       ],
                     ),
@@ -201,9 +205,10 @@ class _courseState extends State<course> {
                       children: [
                         context.width_box(0.06),
                         Text(
-                          'About this course dsjkhgdskhghidsghuid\nshguidshgiudshgisdghisdgis',
+                          courseModel.about!,
                           style: textstyle.subtitle.copyWith(
                               overflow: TextOverflow.ellipsis,
+                               fontSize: context.fontSize(15),
                               color: colors.textcolor,
                               fontWeight: FontWeight.w300),
                         ),
@@ -274,16 +279,33 @@ class _courseState extends State<course> {
                         ? Padding(
                             padding:
                                 const EdgeInsets.only(left: 18.0, right: 18.0),
-                            child: ListView.builder(
+                            child: StreamBuilder(
+                              stream: firebase.getSubCollectionSnapShot('courses', courseModel.id!, 'lectures'),
+                              builder:(context,snapshot){
+                                if(snapshot.connectionState==ConnectionState.waiting){
+                                  return Center(child: CircularProgressIndicator(),);
+                                }else{
+                                  return ListView.builder(
+                               reverse: true,     
                               physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
-                              itemCount: 5,
+                              itemCount: snapshot.data!.docs.length,
                               itemBuilder: (context, index) {
                                 return Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: GestureDetector(
                                     onTap: () {
                                       // add function to start lecture
+                                      lectureModel=Lecture(
+                                     name: snapshot.data!.docs[index]['name'],
+  coursename: courseModel.name!,
+  description: snapshot.data!.docs[index]['description'],
+  pdf: snapshot.data!.docs[index]['pdf'],
+  video: snapshot.data!.docs[index]['video'],
+  more: snapshot.data!.docs[index]['more'],
+  quiz: snapshot.data!.docs[index]['quiz'],
+  image: snapshot.data!.docs[index]['image'],
+                                      );
                                       context.navigateTo(router.lecture);
                                     },
                                     child: ListTile(
@@ -293,17 +315,20 @@ class _courseState extends State<course> {
                                       tileColor: Colors.grey[200],
                                       leading: CircleAvatar(
                                         backgroundColor: colors.color3,
-                                        child: Text('${index + 1}'),
+                                        child: Text(snapshot.data!.docs[index]['num'].toString()),
                                       ),
-                                      title: Text('Lecture ${index + 1}'),
+                                      title: Text(snapshot.data!.docs[index]['name']),
                                       subtitle: Text(
-                                          'Lecture ${index + 1} description'),
+                                         snapshot.data!.docs[index]['description'], overflow: TextOverflow.ellipsis,),
                                       trailing: Icon(Icons.play_circle_fill),
                                     ),
                                   ),
                                 );
                               },
-                            ),
+                            );
+                                }
+                              }
+                              )
                           )
                         : Padding(
                             padding:
@@ -357,7 +382,7 @@ class _courseState extends State<course> {
                 child: Row(
                   children: [
                     Text(
-                      'Course name',
+                     courseModel.name!,
                       style: textstyle.title.copyWith(
                         fontSize: context.fontSize(20),
                       ),
@@ -385,11 +410,11 @@ class _courseState extends State<course> {
                         width: context.width(0.95),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          color: colors.backbackground,
-                      //    image: DecorationImage(
-                        //    image: AssetImage(colors.background_image),
-                         //   fit: BoxFit.cover,
-                        //  ),
+                       //   color: colors.backbackground,
+                         image: DecorationImage(
+                           image: NetworkImage(courseModel.image!),
+                           fit: BoxFit.cover,
+                         ),
                         ),
                       ),
                     ),
@@ -399,7 +424,7 @@ class _courseState extends State<course> {
                       children: [
                         context.width_box(0.06),
                         Text(
-                          'Course Title',
+                          courseModel.name!,
                           style:
                               textstyle.title.copyWith(color: colors.textcolor ,fontSize: context.fontSize(30)),
                         ),
@@ -420,7 +445,7 @@ class _courseState extends State<course> {
                             ),
                             context.width_box(0.01),
                             Text(
-                              '2 hours',
+                              courseModel.hours!,
                               style: textstyle.subtitle
                                   .copyWith(color: colors.color3 , fontSize: context.fontSize(15)),
                             ),
@@ -436,7 +461,7 @@ class _courseState extends State<course> {
                             ),
                             context.width_box(0.01),
                             Text(
-                              'Instructor Name',
+                              courseModel.by!,
                               style: textstyle.subtitle
                                   .copyWith(color: colors.textcolor,fontSize: context.fontSize(15)),
                             ),
@@ -472,7 +497,7 @@ class _courseState extends State<course> {
                       children: [
                         context.width_box(0.06),
                         Text(
-                          'About this course dsjkhgdskhghidsghuid\nshguidshgiudshgisdghisdgis',
+                          courseModel.about!,
                           style: textstyle.subtitle.copyWith(
                               overflow: TextOverflow.ellipsis,
                               color: colors.textcolor,
@@ -548,16 +573,33 @@ class _courseState extends State<course> {
                         ? Padding(
                             padding:
                                 const EdgeInsets.only(left: 60.0, right: 60.0),
-                            child: ListView.builder(
+                            child: StreamBuilder(
+                              stream: firebase.getSubCollectionSnapShot('courses', courseModel.id!, 'lectures'),
+                              builder:(context,snapshot){
+                                if(snapshot.connectionState==ConnectionState.waiting){
+                                  return Center(child: CircularProgressIndicator(),);
+                                }else{
+                                  return ListView.builder(
+                               reverse: true,     
                               physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
-                              itemCount: 5,
+                              itemCount: snapshot.data!.docs.length,
                               itemBuilder: (context, index) {
                                 return Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: GestureDetector(
                                     onTap: () {
                                       // add function to start lecture
+                                      lectureModel=Lecture(
+                                     name: snapshot.data!.docs[index]['name'],
+  coursename: courseModel.name!,
+  description: snapshot.data!.docs[index]['description'],
+  pdf: snapshot.data!.docs[index]['pdf'],
+  video: snapshot.data!.docs[index]['video'],
+  more: snapshot.data!.docs[index]['more'],
+  quiz: snapshot.data!.docs[index]['quiz'],
+  image: snapshot.data!.docs[index]['image'],
+                                      );
                                       context.navigateTo(router.lecture);
                                     },
                                     child: ListTile(
@@ -567,17 +609,20 @@ class _courseState extends State<course> {
                                       tileColor: Colors.grey[200],
                                       leading: CircleAvatar(
                                         backgroundColor: colors.color3,
-                                        child: Text('${index + 1}'),
+                                        child: Text(snapshot.data!.docs[index]['num'].toString()),
                                       ),
-                                      title: Text('Lecture ${index + 1}'),
+                                      title: Text(snapshot.data!.docs[index]['name']),
                                       subtitle: Text(
-                                          'Lecture ${index + 1} description'),
+                                         snapshot.data!.docs[index]['description'], overflow: TextOverflow.ellipsis,),
                                       trailing: Icon(Icons.play_circle_fill),
                                     ),
                                   ),
                                 );
                               },
-                            ),
+                            );
+                                }
+                              }
+                              )
                           )
                         : Padding(
                             padding:

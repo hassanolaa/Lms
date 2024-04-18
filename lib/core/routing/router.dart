@@ -6,6 +6,8 @@ import 'package:lms/features/Lms/ui/screens/signIn.dart';
 import 'package:lms/features/Lms/ui/widgets/ai_converstion.dart';
 import 'package:lms/features/Lms/ui/widgets/pdf.dart';
 
+import '../../features/Lms/data/models/course.dart';
+import '../../features/Lms/data/models/lecture.dart';
 import '../../features/Lms/ui/screens/ai.dart';
 import '../../features/Lms/ui/screens/course.dart';
 import '../../features/Lms/ui/screens/courses.dart';
@@ -50,8 +52,8 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => course());
       case router.lecture:
         return MaterialPageRoute(builder: (_) => lecture()); 
-     // case router.pdf:
-     //   return MaterialPageRoute(builder: (_) => pdf_view()); 
+     case router.pdf:
+        return MaterialPageRoute(builder: (_) => pdf_view()); 
       case router.ai:
         return MaterialPageRoute(builder: (_) => ai_model()); 
       case router.test:
@@ -114,4 +116,22 @@ class router {
 }
 
 String url="";
+Lecture lectureModel = Lecture(
+  name: "",
+  coursename: "",
+  description: "",
+  pdf: "",
+  video: "",
+  more: "",
+  quiz: "",
+  image: "",
+);
 
+CourseClass courseModel= CourseClass(
+  name: "",
+  by: "",
+  about: "",
+  image: "",
+  hours: "",
+  id: "",
+);
